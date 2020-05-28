@@ -26,7 +26,6 @@ const upload = multer({ storage });
 // run multer on the request before our handler
 // it will find the value of the file input with `name="image"`
 // it stores the parsed image object on req.file
-// it looks like this:
 // {
 //   fieldname: 'image',
 //   originalname: 'test.png',
@@ -35,7 +34,6 @@ const upload = multer({ storage });
 //   buffer: <Buffer 89 50 ...>,
 //   size: 6707
 // }
-
 server.post("/upload", upload.single("image"), (req, res) => {
   // pretend this is going into a bytea field in Postgres
   images.push(req.file);
@@ -48,10 +46,9 @@ server.post("/upload", upload.single("image"), (req, res) => {
 server.get("/images", (req, res) => {
   res.send(/*html*/ `
     <h1>Images</h1>
-      ${images.map(
-        (image) => `<img src="/image/${image.originalname}" alt="">`
-      )}
-    </ul>
+      ${images
+        .map((image) => `<img src="/image/${image.originalname}" alt="">`)
+        .join("\n")}
   `);
 });
 
